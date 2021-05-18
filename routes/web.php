@@ -4,6 +4,7 @@ namespace App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PasswordController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +18,7 @@ use App\Http\Controllers\PasswordController;
 */
 
 Route::get('/', function () {
-    return view('auth/login');
+    return view('welcome');
 });
 
 
