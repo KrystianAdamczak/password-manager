@@ -92,6 +92,9 @@ class PasswordController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $password = Password::findOrFail($id);
+        $password->delete();
+
+        return redirect('/index');
     }
 }

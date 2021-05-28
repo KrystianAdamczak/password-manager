@@ -45,7 +45,8 @@
                             d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
                     </svg>
                 </button>
-                <button type="button" class="btn btn-danger btn-sm">
+                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                    data-target="#delete_modal_{{$password->id}}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-trash" viewBox="0 0 16 16">
                         <path
@@ -57,6 +58,44 @@
             </td>
             <!-- Akcje -->
         </tr>
+
+        <!-- Delete modal -->
+        <div class="modal fade" id="delete_modal_{{$password->id}}" tabindex="-1" role="dialog"
+            aria-labelledby="delete_modalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="delete_modalLabel">Potwierdzenie usunięcia hasła do serwisu
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Czy na pewno chcesz usunąć hasło użytkownika <span class="font-weight-bold">
+                            {{$password->login}} </span> do serwisu <br>
+                        <span class="font-weight-bold"> {{$password->site_name}}
+                        </span>? <br>
+                        Aby usunąć dane wpisz poniżej swoje hasło
+                        <input type="password" class="form-control" placeholder="Wpisz hasło" name="password_confirm"
+                            id="password_confirm" onKeyUp="check()">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                        <form action="{{ route('password.destroy', $password->id) }}" class="d-inline">
+                            @csrf
+
+                            <button type="submit" class="btn btn-danger" disabled="disabled"
+                                id="delete_button">Usuń</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Delete modal -->
+
+
         @endforeach
     </tbody>
 </table>
@@ -140,7 +179,7 @@ $("#passwordAddModal").submit(function(e) {
                 '</svg></button>' +
                 '</td>' +
                 '</tr>');
-            $("#passwordForm")[0].reset();
+            $("#passwordAddForm")[0].reset();
             $("#passwordAddModal").modal('toggle');
 
         },
@@ -176,4 +215,17 @@ function toggler(e) {
     }
 }
 </script>
+
+<script>
+function check() {
+var wartosc = document.getElementById("password_confirm").value;
+var auth_password = "{{Auth::user()->password}}";
+console.log(auth_password);
+if(!wartosc)
+document.getElementById("delete_button").disabled = false;
+else
+document.getElementById("delete_button").disabled = true;
+}
+</script>
+
 @endsection

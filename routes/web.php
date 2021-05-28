@@ -25,4 +25,6 @@ Route::get('/', function () {
 Auth::routes();
 Route::get('/index',[PasswordController::class,'index']);
 Route::post('/addPassword',[PasswordController::class,'addPassword'])->name('password.add');
+Route::get('/destroy/{id}', [PasswordController::class, 'destroy'])
+    ->name('password.destroy');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
