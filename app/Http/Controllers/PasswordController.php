@@ -33,9 +33,10 @@ class PasswordController extends Controller
         $password->site_name = $request->site_name;
         $password->login = $request->login;
         $password->hashed_password = Crypt::encryptString($request->nothashed_password);
+        $password->nothashed_password = $request->nothashed_password;
         $password->user_id = Auth::user()->id;
         $password->save();
-        return response()->json($password);
+        return redirect('/index');
 
     }
 
@@ -44,6 +45,7 @@ class PasswordController extends Controller
         $password = Password::findOrFail($request->id);
 
             $password->hashed_password = $request->hashed_password;
+            $password->nothashed_password = $request->hashed_password;
 
             $password->save();
             return redirect('/index');
