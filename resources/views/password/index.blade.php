@@ -102,6 +102,7 @@
             hashed_password = this.hashed_password;
             var status = document.getElementById("status"+id).value;
 
+            console.log(status);
             if (status == 'false') {
                 $("#sid" + id + ' td:nth-child(4)').html(hashed_password+'<button class="btn btn-default btn-sm" value="true"id="status'+id+'">'+
                 '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue" class="bi bi-eye" viewBox="0 0 16 16">' +
@@ -131,6 +132,7 @@
 
         @endforeach
     </tbody>
+
 </table>
 
 <div class="modal fade" id="passwordAddModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -262,6 +264,35 @@ $("#passwordAddModal").submit(function(e) {
         $("#id").val(id);
         $("#passwordEditModal").modal('toggle');
     }
+</script>
+
+<script>
+$(document).ready(function() {
+    // DataTable
+    var table = $('#passwordTable').DataTable({
+        "language":{
+        "searchPlaceholder": "Wpisz wartość...",
+        "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Polish.json"
+    },
+        initComplete: function () {
+            // Apply the search
+            this.api().columns().every( function () {
+                var that = this;
+                $( 'input', this.header() ).on( 'keyup change clear', function () {
+                    if ( that.search() !== this.value ) {
+                        that
+                            .search( this.value )
+                            .draw();
+                    }
+                } );
+            } );
+        },
+        columnDefs: [
+            { searchable: false, orderable:false, targets: [3,4]}
+        ]
+    });
+} );
+
 </script>
 
 
