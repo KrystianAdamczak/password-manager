@@ -20,6 +20,8 @@ use App\Http\Controllers\HomeController;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/showPassword',[PasswordController::class,'showPassword'])->name('password.showPassword');
+
 
 
 Auth::routes();

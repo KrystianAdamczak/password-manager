@@ -106,4 +106,12 @@ class PasswordController extends Controller
 
         return redirect('/index');
     }
+
+    public function showPassword(Request $request)
+    {
+        $id = $request->id;
+        $password = Password::where('id', $id)->value('nothashed_password');
+
+        return response()->json($password);
+    }
 }
