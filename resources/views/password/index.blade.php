@@ -21,10 +21,10 @@
             <td>{{$password->id}}</td>
             <td>{{$password->site_name}}</td>
             <td>{{$password->login}}</td>
-            <td id="password">{{$password->hashed_password}}
+            <td id="password{{$password->id}}">{{$password->hashed_password}}
                 @if ($password->hashed_password !== null)
 
-                <button class="btn btn-default btn-sm" onclick="toggler(this)" value="false"
+                <button class="btn btn-default btn-sm" onclick="toggler({{$password->id}}, '{{$password->hashed_password}}')" value="false"
                     id="status{{$password->id}}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-eye-slash" viewBox="0 0 16 16">
@@ -39,7 +39,8 @@
                 @endif
             </td>
             <!-- Akcje -->
-            <td><button type="button" class="btn btn-primary btn-sm">
+
+            <td><button type="button" class="btn btn-primary btn-sm" onclick="edit({{$password->id}})">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-pencil-square" viewBox="0 0 16 16">
                         <path
@@ -85,7 +86,7 @@
                         <form action="{{ route('password.destroy', $password->id) }}" class="d-inline">
                             @csrf
 
-                            <button type="submit" class="btn btn-danger" id="delete_button">Usuń</button>
+                            <button type="submit" class="btn btn-danger" >Usuń</button>
                         </form>
                     </div>
                 </div>
@@ -93,28 +94,40 @@
         </div>
         <!-- Delete modal -->
         <script>
-        function toggler(e) {
-            var status = document.getElementById("status{{$password->id}}").value;
+        var id;
+        var hashed_password;
+
+        function toggler(id, hashed_password) {
+            id = this.id;
+            hashed_password = this.hashed_password;
+            var status = document.getElementById("status"+id).value;
 
             if (status == 'false') {
-                e.innerHTML =
-                    '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue" class="bi bi-eye" viewBox="0 0 16 16">' +
+                $("#sid" + id + ' td:nth-child(4)').html(hashed_password+'<button class="btn btn-default btn-sm" value="true"id="status'+id+'">'+
+                '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue" class="bi bi-eye" viewBox="0 0 16 16">' +
                     '<path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>' +
                     '<path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>' +
-                    '</svg>';
-                document.getElementById("status{{$password->id}}").value = "true";
+                    '</svg>');
+
+
             } else {
-                e.innerHTML =
+
+                $("#sid" + id + ' td:nth-child(4)').html('********<button class="btn btn-default btn-sm"  value="false"id="status'+id+'">'+
                     '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash" viewBox="0 0 16 16">' +
                     '<path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z"/>' +
                     '<path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z"/>' +
                     '<path d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12-.708.708z"/>' +
-                    '</svg>';
-                document.getElementById("status{{$password->id}}").value = "false";
+                    '</svg>');
+
             }
 
-        }
+
+    }
+
+    var button = $("#status"+id);
+                    button.onclick = toggler(id, "hashed_password");
         </script>
+
 
         @endforeach
     </tbody>
@@ -154,6 +167,35 @@
         </div>
     </div>
 </div>
+ <!--Edit Modal -->
+ <div class="modal fade" id="passwordEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Zmiana hasła</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="passwordEditForm" action="{{route('password.edit')}}">
+                        @csrf
+                        <input type="hidden" id="id" name="id" required />
+
+                        <div class="form-group">
+                            <label for="passwordEdit">Nowe hasło</label>
+                            <input id="passwordEdit" class="form-control" type="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="passwordEdit2">Nowe hasło</label>
+                            <input id="passwordEdit2" class="form-control" type="password" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Zmień hasło</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <script type="text/javascript">
 $("#passwordAddModal").submit(function(e) {
@@ -190,12 +232,12 @@ $("#passwordAddModal").submit(function(e) {
                 '<path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>' +
                 '<path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>' +
                 '</svg></button></td>' +
-                '<td> <button type="button" class ="btn btn-primary btn-sm">' +
+                '<td> <button type="button" class ="btn btn-primary btn-sm" onclick="edit('+response.id+')"> ' +
                 '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">' +
                 '<path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>' +
                 '<path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>' +
                 '</svg></button>' +
-                '<button type="button" class ="btn btn-danger btn-sm">' +
+                '<button type="button" class ="btn btn-danger btn-sm" data-toggle="modal" data-target=#delete_modal_'+response.id+'>' +
                 '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">' +
                 '<path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>' +
                 '<path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>' +
@@ -215,7 +257,12 @@ $("#passwordAddModal").submit(function(e) {
     })
 });
 </script>
-
+<script>
+    function edit(id) {
+        $("#id").val(id);
+        $("#passwordEditModal").modal('toggle');
+    }
+</script>
 
 
 @endsection

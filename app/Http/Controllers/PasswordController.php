@@ -7,6 +7,7 @@ use App\Models\Password;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
 
 class PasswordController extends Controller
 {
@@ -31,13 +32,24 @@ class PasswordController extends Controller
         $password = new Password();
         $password->site_name = $request->site_name;
         $password->login = $request->login;
-        $password->hashed_password = Hash::make($request->nothashed_password);
-        $password->nothashed_password = $request->nothashed_password;
+        $password->hashed_password = Crypt::encryptString($request->nothashed_password);
         $password->user_id = Auth::user()->id;
         $password->save();
-
         return response()->json($password);
+
     }
+
+    public function edit(Request $request)
+    {
+        $password = Password::findOrFail($request->id);
+
+            $password->hashed_password = $request->hashed_password;
+
+            $password->save();
+            return redirect('/index');
+    }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -67,10 +79,7 @@ class PasswordController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.

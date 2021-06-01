@@ -19,8 +19,7 @@ class Password extends Model
         'site_name',
         'login',
         'user_id',
-        'hashed_password',
-        'nothashed_password',
+        'hashed_password'
     ];
 
     public function user()

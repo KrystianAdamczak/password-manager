@@ -18,7 +18,6 @@ class CreatePasswordsTable extends Migration
             $table->string('site_name');
             $table->string('login');
             $table->string('hashed_password');
-            $table->string('nothashed_password');
             $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
