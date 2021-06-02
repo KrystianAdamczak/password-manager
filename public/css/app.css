@@ -10003,3 +10003,18 @@ h3 {
     border-color: #dee2e6;
   }
 }
+.table td {
+    text-align: center;
+ }
+
+ .changePassword {
+     color: red;
+ }
+
+ .notChangePassword {
+    color: green;
+}
+
+.shouldChangePassword {
+    color: orange;
+}

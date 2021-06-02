@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 @section('content')
 
@@ -17,13 +18,31 @@
     </thead>
     <tbody>
         @foreach($user->passwords as $password)
-        <tr id="sid{{$password->id}}">
+        <tr id="sid{{$password->id}}"
+
+             @if ($password->updated_at)>
             <td>{{$password->id}}</td>
             <td>{{$password->site_name}}</td>
             <td>{{$password->login}}</td>
-            <td id="password{{$password->id}}">********
-                @if ($password->hashed_password !== null)
 
+                <?php
+
+                    $start_time = \Carbon\Carbon::parse($password->updated_at);
+                    $finish_time = \Carbon\Carbon::parse(\Carbon\Carbon::now());
+
+                    $result = $finish_time->diffInDays($start_time);
+                    if ($result > 30) {
+                        echo (' <td class="changePassword" id="password'.$password->id.'">********');
+                      }
+                    else if( $result >= 15)
+                    echo (' <td class="shouldChangePassword" id="password'.$password->id.'">********');
+
+                    else
+                    echo (' <td class="notChangePassword" id="password'.$password->id.'">********');
+
+                ?>
+                @if ($password->hashed_password !== null)
+                @endif
                 <button class="btn btn-default btn-sm" onclick="toggler({{$password->id}})" value="false"
                     id="status{{$password->id}}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"

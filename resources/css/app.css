@@ -1,3 +1,15 @@
 .table td {
-    text-align: center; 
+    text-align: center;
  }
+
+ .changePassword {
+     color: red;
+ }
+
+ .notChangePassword {
+    color: green;
+}
+
+.shouldChangePassword {
+    color: orange;
+}
