@@ -3,8 +3,8 @@ namespace App;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +18,7 @@ use App\Http\Controllers\HomeController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth/login');
 });
 Route::get('/showPassword',[PasswordController::class,'showPassword'])->name('password.showPassword');
 
@@ -31,4 +31,4 @@ Route::get('/destroy/{id}', [PasswordController::class, 'destroy'])
     ->name('password.destroy')->middleware(['auth', 'password.confirm']);
 Route::get('/edit', [PasswordController::class, 'edit'])
     ->name('password.edit')->middleware(['auth', 'password.confirm']);
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'home'])->name('home');

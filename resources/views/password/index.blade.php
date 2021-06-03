@@ -3,16 +3,23 @@
 @section('content')
 
 <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#passwordAddModal">Dodaj hasło</a>
+
+<div class="tooltip2">Oznaczenia kolorów
+  <span class="tooltiptext2"><span style="color:green;">***</span> Hasło nie musi być zmienione <br>
+  <span style="color:orange;">***</span> Hasło powinno być zmienione <br>
+  <span style="color:red;">***</span> Hasło musi być zmienione <br>
+</span>
+</div>
 <br>
 <br>
-<table class="table table-striped " id="passwordTable">
+<table class="table table-dark" id="passwordTable">
     <thead>
         <tr>
-            <th scope="col">id</th>
-            <th scope="col">nazwa</th>
-            <th scope="col">nazwa użytkownika</th>
-            <th scope="col">hasło</th>
-            <th scope="col">akcje</th>
+            <th scope="col">#</th>
+            <th scope="col">Witryna</th>
+            <th scope="col">Użytkownik</th>
+            <th scope="col">Hasło</th>
+            <th scope="col">Akcje</th>
 
         </tr>
     </thead>
@@ -172,16 +179,16 @@
                 <form id="passwordAddForm" action="{{route('password.add')}}" method="post">
                     @csrf
                     <div class="form-group">
-                        <label for="site_name">nazwa</label>
+                        <label for="site_name">Witryna</label>
                         <input id="site_name" name="site_name" class="form-control" type="text" required>
                         <span id="site_name" style="color:red;"><span>
                     </div>
                     <div class="form-group">
-                        <label for="login">nazwa użytkownika</label>
+                        <label for="login">Użytkownik</label>
                         <input id="login" name="login" class="form-control" type="text" required>
                     </div>
                     <div class="form-group">
-                        <label for="nothashed_password">hasło</label>
+                        <label for="nothashed_password">Hasło</label>
                         <input id="nothashed_password" name="nothashed_password" class="form-control" type="password"
                             required>
                     </div>
@@ -201,7 +208,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Zmiana hasła</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                      </button>
             </div>
             <div class="modal-body">
                 <form id="passwordEditForm" action="{{route('password.edit')}}"
@@ -215,7 +224,7 @@
                             required>
                     </div>
                     <div class="form-group">
-                        <label for="passwordEdit2">Nowe hasło</label>
+                        <label for="passwordEdit2">Powtórz nowe hasło</label>
                         <input id="passwordEdit2" name="hashed_password2" class="form-control" type="password" required>
                     </div>
 
@@ -262,6 +271,10 @@ $(document).ready(function() {
         }]
     });
 });
+
+$(function () {
+  $('[data-bs-toggle="tooltip"]').tooltip()
+})
 </script>
 
 
